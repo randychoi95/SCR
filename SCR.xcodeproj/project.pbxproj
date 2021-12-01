@@ -11,6 +11,13 @@
 		9875BD3C2757347E0019E181 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9875BD3B2757347E0019E181 /* Assets.xcassets */; };
 		9875BD3F2757347E0019E181 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9875BD3D2757347E0019E181 /* LaunchScreen.storyboard */; };
 		9875BD482757355C0019E181 /* ModernRIBs in Frameworks */ = {isa = PBXBuildFile; productRef = 9875BD472757355C0019E181 /* ModernRIBs */; };
+		9875BD56275736340019E181 /* AppRootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD51275736340019E181 /* AppRootRouter.swift */; };
+		9875BD57275736340019E181 /* AppRootViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9875BD52275736340019E181 /* AppRootViewController.storyboard */; };
+		9875BD58275736340019E181 /* AppRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD53275736340019E181 /* AppRootViewController.swift */; };
+		9875BD59275736340019E181 /* AppRootBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD54275736340019E181 /* AppRootBuilder.swift */; };
+		9875BD5A275736340019E181 /* AppRootInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD55275736340019E181 /* AppRootInteractor.swift */; };
+		9875BD5C275736F80019E181 /* AppComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD5B275736F80019E181 /* AppComponent.swift */; };
+		9875BD6027573B1E0019E181 /* ScrUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9875BD5F27573B1E0019E181 /* ScrUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +26,13 @@
 		9875BD3B2757347E0019E181 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9875BD3E2757347E0019E181 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9875BD402757347E0019E181 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9875BD51275736340019E181 /* AppRootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootRouter.swift; sourceTree = "<group>"; };
+		9875BD52275736340019E181 /* AppRootViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AppRootViewController.storyboard; sourceTree = "<group>"; };
+		9875BD53275736340019E181 /* AppRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootViewController.swift; sourceTree = "<group>"; };
+		9875BD54275736340019E181 /* AppRootBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootBuilder.swift; sourceTree = "<group>"; };
+		9875BD55275736340019E181 /* AppRootInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootInteractor.swift; sourceTree = "<group>"; };
+		9875BD5B275736F80019E181 /* AppComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponent.swift; sourceTree = "<group>"; };
+		9875BD5D275738F70019E181 /* Platform */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Platform; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +41,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9875BD482757355C0019E181 /* ModernRIBs in Frameworks */,
+				9875BD6027573B1E0019E181 /* ScrUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,8 +51,10 @@
 		9875BD262757347D0019E181 = {
 			isa = PBXGroup;
 			children = (
+				9875BD5D275738F70019E181 /* Platform */,
 				9875BD312757347D0019E181 /* SCR */,
 				9875BD302757347D0019E181 /* Products */,
+				9875BD5E27573B1E0019E181 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,12 +69,41 @@
 		9875BD312757347D0019E181 /* SCR */ = {
 			isa = PBXGroup;
 			children = (
-				9875BD322757347D0019E181 /* AppDelegate.swift */,
+				9875BD4A275735BA0019E181 /* AppRoot */,
+				9875BD49275735A90019E181 /* AppDelegate */,
 				9875BD3B2757347E0019E181 /* Assets.xcassets */,
 				9875BD3D2757347E0019E181 /* LaunchScreen.storyboard */,
 				9875BD402757347E0019E181 /* Info.plist */,
 			);
 			path = SCR;
+			sourceTree = "<group>";
+		};
+		9875BD49275735A90019E181 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				9875BD322757347D0019E181 /* AppDelegate.swift */,
+				9875BD5B275736F80019E181 /* AppComponent.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		9875BD4A275735BA0019E181 /* AppRoot */ = {
+			isa = PBXGroup;
+			children = (
+				9875BD51275736340019E181 /* AppRootRouter.swift */,
+				9875BD52275736340019E181 /* AppRootViewController.storyboard */,
+				9875BD53275736340019E181 /* AppRootViewController.swift */,
+				9875BD54275736340019E181 /* AppRootBuilder.swift */,
+				9875BD55275736340019E181 /* AppRootInteractor.swift */,
+			);
+			path = AppRoot;
+			sourceTree = "<group>";
+		};
+		9875BD5E27573B1E0019E181 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,6 +124,7 @@
 			name = SCR;
 			packageProductDependencies = (
 				9875BD472757355C0019E181 /* ModernRIBs */,
+				9875BD5F27573B1E0019E181 /* ScrUI */,
 			);
 			productName = SCR;
 			productReference = 9875BD2F2757347D0019E181 /* SCR.app */;
@@ -126,6 +173,7 @@
 			files = (
 				9875BD3F2757347E0019E181 /* LaunchScreen.storyboard in Resources */,
 				9875BD3C2757347E0019E181 /* Assets.xcassets in Resources */,
+				9875BD57275736340019E181 /* AppRootViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +184,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9875BD58275736340019E181 /* AppRootViewController.swift in Sources */,
+				9875BD56275736340019E181 /* AppRootRouter.swift in Sources */,
 				9875BD332757347D0019E181 /* AppDelegate.swift in Sources */,
+				9875BD59275736340019E181 /* AppRootBuilder.swift in Sources */,
+				9875BD5A275736340019E181 /* AppRootInteractor.swift in Sources */,
+				9875BD5C275736F80019E181 /* AppComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +412,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9875BD462757355C0019E181 /* XCRemoteSwiftPackageReference "ModernRIBs" */;
 			productName = ModernRIBs;
+		};
+		9875BD5F27573B1E0019E181 /* ScrUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScrUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
