@@ -17,7 +17,12 @@
 		9875BD59275736340019E181 /* AppRootBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD54275736340019E181 /* AppRootBuilder.swift */; };
 		9875BD5A275736340019E181 /* AppRootInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD55275736340019E181 /* AppRootInteractor.swift */; };
 		9875BD5C275736F80019E181 /* AppComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD5B275736F80019E181 /* AppComponent.swift */; };
-		9875BD6027573B1E0019E181 /* ScrUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9875BD5F27573B1E0019E181 /* ScrUI */; };
+		98B83A6F2757433700B07DAD /* ScrDetail in Frameworks */ = {isa = PBXBuildFile; productRef = 98B83A6E2757433700B07DAD /* ScrDetail */; };
+		98B83A712757433700B07DAD /* ScrSearch in Frameworks */ = {isa = PBXBuildFile; productRef = 98B83A702757433700B07DAD /* ScrSearch */; };
+		98B83A73275846D400B07DAD /* ScrUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98B83A72275846D400B07DAD /* ScrUI */; };
+		98B83A752758628E00B07DAD /* RIBsUtil in Frameworks */ = {isa = PBXBuildFile; productRef = 98B83A742758628E00B07DAD /* RIBsUtil */; };
+		98B83A7727589CEF00B07DAD /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 98B83A7627589CEF00B07DAD /* Network */; };
+		98B83A7927589DC000B07DAD /* NetworkImp in Frameworks */ = {isa = PBXBuildFile; productRef = 98B83A7827589DC000B07DAD /* NetworkImp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +38,7 @@
 		9875BD55275736340019E181 /* AppRootInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootInteractor.swift; sourceTree = "<group>"; };
 		9875BD5B275736F80019E181 /* AppComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponent.swift; sourceTree = "<group>"; };
 		9875BD5D275738F70019E181 /* Platform */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Platform; sourceTree = "<group>"; };
+		9875BD61275742280019E181 /* ScrList */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ScrList; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,8 +46,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98B83A6F2757433700B07DAD /* ScrDetail in Frameworks */,
 				9875BD482757355C0019E181 /* ModernRIBs in Frameworks */,
-				9875BD6027573B1E0019E181 /* ScrUI in Frameworks */,
+				98B83A712757433700B07DAD /* ScrSearch in Frameworks */,
+				98B83A7727589CEF00B07DAD /* Network in Frameworks */,
+				98B83A7927589DC000B07DAD /* NetworkImp in Frameworks */,
+				98B83A752758628E00B07DAD /* RIBsUtil in Frameworks */,
+				98B83A73275846D400B07DAD /* ScrUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +62,7 @@
 		9875BD262757347D0019E181 = {
 			isa = PBXGroup;
 			children = (
+				9875BD61275742280019E181 /* ScrList */,
 				9875BD5D275738F70019E181 /* Platform */,
 				9875BD312757347D0019E181 /* SCR */,
 				9875BD302757347D0019E181 /* Products */,
@@ -124,7 +136,12 @@
 			name = SCR;
 			packageProductDependencies = (
 				9875BD472757355C0019E181 /* ModernRIBs */,
-				9875BD5F27573B1E0019E181 /* ScrUI */,
+				98B83A6E2757433700B07DAD /* ScrDetail */,
+				98B83A702757433700B07DAD /* ScrSearch */,
+				98B83A72275846D400B07DAD /* ScrUI */,
+				98B83A742758628E00B07DAD /* RIBsUtil */,
+				98B83A7627589CEF00B07DAD /* Network */,
+				98B83A7827589DC000B07DAD /* NetworkImp */,
 			);
 			productName = SCR;
 			productReference = 9875BD2F2757347D0019E181 /* SCR.app */;
@@ -330,6 +347,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FF4F6NQNDX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SCR/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -355,6 +373,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FF4F6NQNDX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SCR/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -413,9 +432,29 @@
 			package = 9875BD462757355C0019E181 /* XCRemoteSwiftPackageReference "ModernRIBs" */;
 			productName = ModernRIBs;
 		};
-		9875BD5F27573B1E0019E181 /* ScrUI */ = {
+		98B83A6E2757433700B07DAD /* ScrDetail */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScrDetail;
+		};
+		98B83A702757433700B07DAD /* ScrSearch */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ScrSearch;
+		};
+		98B83A72275846D400B07DAD /* ScrUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ScrUI;
+		};
+		98B83A742758628E00B07DAD /* RIBsUtil */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RIBsUtil;
+		};
+		98B83A7627589CEF00B07DAD /* Network */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Network;
+		};
+		98B83A7827589DC000B07DAD /* NetworkImp */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NetworkImp;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

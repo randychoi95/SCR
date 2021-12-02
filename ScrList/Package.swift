@@ -4,47 +4,43 @@
 import PackageDescription
 
 let package = Package(
-    name: "Platform",
+    name: "ScrList",
     platforms: [.iOS(.v15)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "ScrUI",
-            targets: ["ScrUI"]),
+            name: "ScrSearch",
+            targets: ["ScrSearch"]),
         .library(
-            name: "RIBsUtil",
-            targets: ["RIBsUtil"]),
+            name: "ScrDetail",
+            targets: ["ScrDetail"]),
         .library(
-            name: "Network",
-            targets: ["Network"]),
-        .library(
-            name: "NetworkImp",
-            targets: ["NetworkImp"]),
+            name: "ScrEntity",
+            targets: ["ScrEntity"]),
     ],
     dependencies: [
         .package(name: "ModernRIBs", url: "https://github.com/DevYeom/ModernRIBs", .exact("1.0.1")),
-
+        .package(path: "../Platform")
     ],
     targets: [
         .target(
-            name: "ScrUI",
+            name: "ScrSearch",
             dependencies: [
                 "ModernRIBs",
-            ]),
+                .product(name: "ScrUI", package: "Platform")
+            ]
+        ),
         .target(
-            name: "RIBsUtil",
+            name: "ScrDetail",
             dependencies: [
-                "ModernRIBs",
-            ]),
+                "ModernRIBs"
+            ]
+        ),
         .target(
-            name: "Network",
+            name: "ScrEntity",
             dependencies: [
                 
-            ]),
-        .target(
-            name: "NetworkImp",
-            dependencies: [
-                "Network"
-            ]),
+            ]
+        ),
     ]
 )

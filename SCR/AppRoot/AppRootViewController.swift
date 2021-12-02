@@ -7,6 +7,7 @@
 
 import ModernRIBs
 import UIKit
+import RIBsUtil
 
 protocol AppRootPresentableListener: AnyObject {
     // TODO: Declare properties and methods that the view controller can invoke to perform
@@ -15,6 +16,11 @@ protocol AppRootPresentableListener: AnyObject {
 }
 
 final class AppRootViewController: UIViewController, AppRootPresentable, AppRootViewControllable {
-
+    
     weak var listener: AppRootPresentableListener?
+    
+    func present(viewController: ViewControllable) {
+        viewController.uiviewController.modalPresentationStyle = .fullScreen
+        self.present(viewController.uiviewController, animated: true, completion: nil)
+    }
 }
