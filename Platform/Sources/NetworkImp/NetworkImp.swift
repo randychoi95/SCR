@@ -42,7 +42,7 @@ private final class RequestFactory<T: Request> {
     
     init(request: T) {
         self.request = request
-        self.urlComponents = URLComponents(url: request.endpoint, resolvingAgainstBaseURL: true)
+//        self.urlComponents = URLComponents(url: request.endpoint, resolvingAgainstBaseURL: true)
     }
     
     func urlRequestRepresentation() throws -> URLRequest {
@@ -57,15 +57,20 @@ private final class RequestFactory<T: Request> {
     }
     
     private func makeGetRequest() throws -> URLRequest {
+        var param = [""]
         if request.query.isEmpty == false {
             urlComponents?.queryItems = request.query.map { URLQueryItem(name: $0.key, value: "\($0.value)")}
+            request.query.forEach {
+                param.append("\($0.key)=\($0.value)")
+            }
         }
-        return try makeURLRequest()
+        let bodyStr = param.joined(separator: "&")
+        return try makeURLRequest(httpBody: bodyStr)
     }
     
     private func makePostRequest() throws -> URLRequest {
         let body = try JSONSerialization.data(withJSONObject: request.query, options: [])
-        return try makeURLRequest(httpBody: body)
+        return try makeURLRequest()
     }
     
     private func makePutRequest() throws -> URLRequest {
@@ -75,9 +80,9 @@ private final class RequestFactory<T: Request> {
         return try makeURLRequest()
     }
     
-    private func makeURLRequest(httpBody: Data? = nil) throws -> URLRequest {
-        guard let url = urlComponents?.url else {
-            throw NetworkError.invalidURL(url: request.endpoint.absoluteString)
+    private func makeURLRequest(httpBody: String = "") throws -> URLRequest {
+        guard let url = URL(string: "\(request.endpoint)?\(httpBody)") else {
+            throw NetworkError.invalidURL(url: request.endpoint)
         }
         
         var urlRequest = URLRequest(url: url)
@@ -85,7 +90,7 @@ private final class RequestFactory<T: Request> {
             urlRequest.setValue($0.value, forHTTPHeaderField: $0.key)
         }
         urlRequest.httpMethod = request.method.rawValue
-        urlRequest.httpBody = httpBody
+        urlRequest.url = url
         
         return urlRequest
     }

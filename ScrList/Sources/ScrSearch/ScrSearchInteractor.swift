@@ -6,6 +6,9 @@
 //
 
 import ModernRIBs
+import ScrRepository
+import Combine
+import ScrEntity
 
 protocol ScrSearchRouting: ViewableRouting {
     
@@ -20,21 +23,37 @@ public protocol ScrSearchListener: AnyObject {
     func attachScrDetail()
 }
 
+protocol ScrSearchInteractorDependency {
+    var scrRepository: ScrRepository { get }
+}
+
 final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, ScrSearchInteractable, ScrSearchPresentableListener {
 
     weak var router: ScrSearchRouting?
     weak var listener: ScrSearchListener?
 
-    // TODO: Add additional dependencies to constructor. Do not perform any logic
-    // in constructor.
-    override init(presenter: ScrSearchPresentable) {
+    private let dependency: ScrSearchInteractorDependency
+    
+    private var cancellables: Set<AnyCancellable>
+    
+    init(
+        presenter: ScrSearchPresentable,
+        dependency: ScrSearchInteractorDependency
+    ) {
+        self.dependency = dependency
+        self.cancellables = .init()
         super.init(presenter: presenter)
         presenter.listener = self
     }
 
     override func didBecomeActive() {
         super.didBecomeActive()
-        // TODO: Implement business logic here.
+        
+        dependency.scrRepository.scrList
+            .sink { models in
+                print("CJHLOG: models = \(models)")
+                print("CJHLGO: count is \(models.count)")
+            }.store(in: &cancellables)
     }
 
     override func willResignActive() {

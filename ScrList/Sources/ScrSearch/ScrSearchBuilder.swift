@@ -7,15 +7,14 @@
 
 import ModernRIBs
 import ScrUI
+import ScrRepository
 
 public protocol ScrSearchDependency: Dependency {
-    // TODO: Declare the set of dependencies required by this RIB, but cannot be
-    // created by this RIB.
+    var scrRepository: ScrRepository { get }
 }
 
-final class ScrSearchComponent: Component<ScrSearchDependency> {
-
-    // TODO: Declare 'fileprivate' dependencies that are only used by this RIB.
+final class ScrSearchComponent: Component<ScrSearchDependency>, ScrSearchInteractorDependency {
+    var scrRepository: ScrRepository { dependency.scrRepository }
 }
 
 // MARK: - Builder
@@ -33,7 +32,10 @@ public final class ScrSearchBuilder: Builder<ScrSearchDependency>, ScrSearchBuil
     public func build(withListener listener: ScrSearchListener) -> ViewableRouting {
         let component = ScrSearchComponent(dependency: dependency)
         let viewController = ScrSearchViewController()
-        let interactor = ScrSearchInteractor(presenter: viewController)
+        let interactor = ScrSearchInteractor(
+            presenter: viewController,
+            dependency: component
+        )
         interactor.listener = listener
         return ScrSearchRouter(interactor: interactor, viewController: viewController)
     }

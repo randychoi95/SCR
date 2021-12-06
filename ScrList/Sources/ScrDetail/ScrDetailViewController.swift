@@ -37,7 +37,7 @@ final class ScrDetailViewController: UIViewController, ScrDetailPresentable, Scr
         view.addSubview(label)
         view.backgroundColor = .white
         
-        title = "요소수 상세"
+//        title = "요소수 상세"
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(

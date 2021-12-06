@@ -47,7 +47,7 @@ final class ScrSearchViewController: UIViewController, ScrSearchPresentable, Scr
         view.addSubview(button)
         view.backgroundColor = .white
         
-        title = "요소수 조회"
+//        title = "요소수 조회"
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(

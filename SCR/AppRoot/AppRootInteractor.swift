@@ -6,6 +6,7 @@
 //
 
 import ModernRIBs
+import Foundation
 
 protocol AppRootRouting: ViewableRouting {
     func attachScrSearch()

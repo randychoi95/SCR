@@ -20,10 +20,13 @@ let package = Package(
         .library(
             name: "NetworkImp",
             targets: ["NetworkImp"]),
+        .library(
+            name: "CombineUtil",
+            targets: ["CombineUtil"]),
     ],
     dependencies: [
         .package(name: "ModernRIBs", url: "https://github.com/DevYeom/ModernRIBs", .exact("1.0.1")),
-
+        .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.0.0"),
     ],
     targets: [
         .target(
@@ -45,6 +48,11 @@ let package = Package(
             name: "NetworkImp",
             dependencies: [
                 "Network"
+            ]),
+        .target(
+            name: "CombineUtil",
+            dependencies: [
+                "CombineExt"
             ]),
     ]
 )

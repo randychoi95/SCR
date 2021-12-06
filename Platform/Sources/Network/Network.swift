@@ -14,7 +14,7 @@ public typealias HTTPHeader = [String: String]
 public protocol Request: Hashable {
     associatedtype Output: Codable
     
-    var endpoint: URL { get }
+    var endpoint: String { get }
     var method: HTTPMethod { get }
     var query: QueryItems { get }
     var header: HTTPHeader { get }
