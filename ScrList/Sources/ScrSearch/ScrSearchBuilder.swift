@@ -9,13 +9,15 @@ import ModernRIBs
 import ScrUI
 import ScrRepository
 import InventoryRepository
+import ScrDetail
+import RIBsUtil
 
 public protocol ScrSearchDependency: Dependency {
     var scrRepository: ScrRepository { get }
     var inventoryRepository: InventoryRepository { get }
 }
 
-final class ScrSearchComponent: Component<ScrSearchDependency>, ScrSearchInteractorDependency {
+final class ScrSearchComponent: Component<ScrSearchDependency>, ScrSearchInteractorDependency,ScrDetailDependency {
     var scrRepository: ScrRepository { dependency.scrRepository }
     var inventoryRepository: InventoryRepository { dependency.inventoryRepository }
 }
@@ -40,6 +42,13 @@ public final class ScrSearchBuilder: Builder<ScrSearchDependency>, ScrSearchBuil
             dependency: component
         )
         interactor.listener = listener
-        return ScrSearchRouter(interactor: interactor, viewController: viewController)
+        
+        let scrDetailBuilder = ScrDetailBuilder(dependency: component)
+        
+        return ScrSearchRouter(
+            interactor: interactor,
+            viewController: viewController,
+            scrDetailBuildable: scrDetailBuilder
+        )
     }
 }

@@ -10,8 +10,6 @@ import Foundation
 
 protocol AppRootRouting: ViewableRouting {
     func attachScrSearch()
-    func attachScrDetail()
-    func detachScrDetail()
 }
 
 protocol AppRootPresentable: Presentable {
@@ -24,7 +22,7 @@ protocol AppRootListener: AnyObject {
 }
 
 final class AppRootInteractor: PresentableInteractor<AppRootPresentable>, AppRootInteractable, AppRootPresentableListener {
-
+    
     weak var router: AppRootRouting?
     weak var listener: AppRootListener?
 
@@ -44,13 +42,5 @@ final class AppRootInteractor: PresentableInteractor<AppRootPresentable>, AppRoo
     override func willResignActive() {
         super.willResignActive()
         // TODO: Pause any business logic.
-    }
-    
-    func attachScrDetail() {
-        router?.attachScrDetail()
-    }
-    
-    func detachScrDetail() {
-        router?.detachScrDetail()
     }
 }

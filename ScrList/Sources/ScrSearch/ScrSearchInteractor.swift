@@ -11,18 +11,23 @@ import Combine
 import ScrEntity
 import ScrUI
 import InventoryRepository
+import InventoryEntity
+import Foundation
+import RIBsUtil
 
 protocol ScrSearchRouting: ViewableRouting {
-    
+    func attachScrDetail(models: InventoryModel)
+    func detachScrDetail()
 }
 
 protocol ScrSearchPresentable: Presentable {
     var listener: ScrSearchPresentableListener? { get set }
-    // TODO: Declare methods the interactor can invoke the presenter to present data.
+    
+    func update(model: [InventoryModel])
 }
 
 public protocol ScrSearchListener: AnyObject {
-    func attachScrDetail()
+    
 }
 
 protocol ScrSearchInteractorDependency {
@@ -37,6 +42,8 @@ final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, Sc
 
     private let dependency: ScrSearchInteractorDependency
     
+    private var models: [InventoryModel]
+    
     private var cancellables: Set<AnyCancellable>
     
     init(
@@ -45,6 +52,7 @@ final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, Sc
     ) {
         self.dependency = dependency
         self.cancellables = .init()
+        self.models = []
         super.init(presenter: presenter)
         presenter.listener = self
     }
@@ -59,17 +67,27 @@ final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, Sc
             }.store(in: &cancellables)
         
         dependency.inventoryRepository.inventoryList
+            .receive(on: DispatchQueue.main)
             .sink { models in
                 print("CJHLOG: inventoryRepository models = \(models)")
                 print("CJHLOG: inventoryRepository count is \(models.count)")
-            }.store(in: &cancellables)    }
+                self.models = models
+                self.presenter.update(model: self.models)
+            }.store(in: &cancellables)
+        
+        
+    }
 
     override func willResignActive() {
         super.willResignActive()
         // TODO: Pause any business logic.
     }
     
-    func didTapNext() {
-        listener?.attachScrDetail()
+    func didSelectItem(at: Int) {
+        router?.attachScrDetail(models: self.models[at])
+    }
+    
+    func detachScrDetail() {
+        router?.detachScrDetail()
     }
 }

@@ -6,21 +6,52 @@
 //
 
 import ModernRIBs
+import InventoryEntity
+import ScrDetail
+import RIBsUtil
 
-protocol ScrSearchInteractable: Interactable {
+protocol ScrSearchInteractable: Interactable, ScrDetailListener {
     var router: ScrSearchRouting? { get set }
     var listener: ScrSearchListener? { get set }
 }
 
 protocol ScrSearchViewControllable: ViewControllable {
-    // TODO: Declare methods the router invokes to manipulate the view hierarchy.
+    
 }
 
 final class ScrSearchRouter: ViewableRouter<ScrSearchInteractable, ScrSearchViewControllable>, ScrSearchRouting {
-
-    // TODO: Constructor inject child builder protocols to allow building children.
-    override init(interactor: ScrSearchInteractable, viewController: ScrSearchViewControllable) {
+    
+    private let scrDetailBuildable: ScrDetailBuildable
+    private var scrDetailRouting: Routing?
+    
+    init(
+        interactor: ScrSearchInteractable,
+        viewController: ScrSearchViewControllable,
+        scrDetailBuildable: ScrDetailBuildable
+    ) {
+        self.scrDetailBuildable = scrDetailBuildable
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
+    }
+    
+    func attachScrDetail(models: InventoryModel) {
+        if scrDetailRouting != nil {
+            return
+        }
+        
+        let router = scrDetailBuildable.build(withListener: interactor, model: models)
+        attachChild(router)
+        scrDetailRouting = router
+        viewController.pushVieController(router.viewControllable, animated: true)
+    }
+    
+    func detachScrDetail() {
+        guard let router = scrDetailRouting else {
+            return
+        }
+        
+        viewControllable.popViewController(animated: true)
+        detachChild(router)
+        scrDetailRouting = nil
     }
 }

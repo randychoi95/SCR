@@ -6,18 +6,24 @@
 //
 
 import ModernRIBs
+import InventoryEntity
 
 protocol ScrDetailRouting: ViewableRouting {
-    // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
+    
 }
 
 protocol ScrDetailPresentable: Presentable {
     var listener: ScrDetailPresentableListener? { get set }
-    // TODO: Declare methods the interactor can invoke the presenter to present data.
+    
+    func update(model: InventoryModel)
 }
 
 public protocol ScrDetailListener: AnyObject {
     func detachScrDetail()
+}
+
+protocol ScrDetailInteractorDependency {
+    var inventoryModel: InventoryModel { get }
 }
 
 final class ScrDetailInteractor: PresentableInteractor<ScrDetailPresentable>, ScrDetailInteractable, ScrDetailPresentableListener {
@@ -25,16 +31,21 @@ final class ScrDetailInteractor: PresentableInteractor<ScrDetailPresentable>, Sc
     weak var router: ScrDetailRouting?
     weak var listener: ScrDetailListener?
 
-    // TODO: Add additional dependencies to constructor. Do not perform any logic
-    // in constructor.
-    override init(presenter: ScrDetailPresentable) {
+    private let dependency: ScrDetailInteractorDependency
+    
+    init(
+        presenter: ScrDetailPresentable,
+        dependency: ScrDetailInteractorDependency
+    ) {
+        self.dependency = dependency
         super.init(presenter: presenter)
         presenter.listener = self
     }
 
     override func didBecomeActive() {
         super.didBecomeActive()
-        // TODO: Implement business logic here.
+        
+        presenter.update(model: dependency.inventoryModel)
     }
 
     override func willResignActive() {
@@ -45,4 +56,5 @@ final class ScrDetailInteractor: PresentableInteractor<ScrDetailPresentable>, Sc
     func detachScrDetail() {
         listener?.detachScrDetail()
     }
+    
 }

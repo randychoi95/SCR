@@ -7,6 +7,7 @@
 
 import ModernRIBs
 import UIKit
+import InventoryEntity
 
 protocol ScrDetailPresentableListener: AnyObject {
     func detachScrDetail()
@@ -19,7 +20,6 @@ final class ScrDetailViewController: UIViewController, ScrDetailPresentable, Scr
     private let label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "ScrDetailViewController.storyboard"
         return label
     }()
     
@@ -37,7 +37,7 @@ final class ScrDetailViewController: UIViewController, ScrDetailPresentable, Scr
         view.addSubview(label)
         view.backgroundColor = .white
         
-//        title = "요소수 상세"
+        title = "요소수 상세"
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(
@@ -57,5 +57,9 @@ final class ScrDetailViewController: UIViewController, ScrDetailPresentable, Scr
     
     @objc func close() {
         listener?.detachScrDetail()
+    }
+    
+    func update(model: InventoryModel) {
+        label.text = model.name
     }
 }

@@ -13,12 +13,13 @@ import ScrDetail
 import NetworkImp
 import ScrRepository
 import InventoryRepository
+import RIBsUtil
 
 protocol AppRootDependency: Dependency {
     
 }
 
-final class AppRootComponent: Component<AppRootDependency>, ScrSearchDependency,ScrDetailDependency {
+final class AppRootComponent: Component<AppRootDependency>, ScrSearchDependency {
     
     var scrRepository: ScrRepository
     var inventoryRepository: InventoryRepository
@@ -75,13 +76,12 @@ final class AppRootBuilder: Builder<AppRootDependency>, AppRootBuildable {
         let interactor = AppRootInteractor(presenter: viewController)
         
         let scrSearchBuilder = ScrSearchBuilder(dependency: component)
-        let scrDetailBuilder = ScrDetailBuilder(dependency: component)
+        let router = scrSearchBuilder.build(withListener: interactor)
         
         return AppRootRouter(
             interactor: interactor,
             viewController: viewController,
-            scrSearchBuildable: scrSearchBuilder,
-            scrDetailBuildable: scrDetailBuilder
+            scrSearchBuildable: scrSearchBuilder
         )
     }
 }

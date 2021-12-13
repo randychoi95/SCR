@@ -13,7 +13,7 @@ protocol ScrDetailInteractable: Interactable {
 }
 
 protocol ScrDetailViewControllable: ViewControllable {
-    // TODO: Declare methods the router invokes to manipulate the view hierarchy.
+    
 }
 
 final class ScrDetailRouter: ViewableRouter<ScrDetailInteractable, ScrDetailViewControllable>, ScrDetailRouting {
