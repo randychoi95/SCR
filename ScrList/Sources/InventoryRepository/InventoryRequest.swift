@@ -2,16 +2,16 @@
 //  File.swift
 //  
 //
-//  Created by 최제환 on 2021/12/03.
+//  Created by 최제환 on 2021/12/13.
 //
 
 import Foundation
 import Network
-import ScrEntity
+import InventoryEntity
 
-struct ScrRequest: Request {
+struct InventoryRequest: Request {
     
-    typealias Output = ScrResponse
+    typealias Output = InventoryResponse
     
     var endpoint: String
     var method: HTTPMethod
@@ -26,10 +26,10 @@ struct ScrRequest: Request {
     }
 }
 
-struct ScrResponse: Codable {
+struct InventoryResponse: Codable {
     public let page: Int
     public let perPage: Int
     public let totalCount: Int
     public let currentCount: Int
-    public let data: [OwnScrModel]
+    public let data: [InventoryModel]
 }

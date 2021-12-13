@@ -22,6 +22,7 @@ public final class NetworkImp: Network {
     public func send<T>(_ request: T) -> AnyPublisher<Response<T.Output>, Error> where T: Request {
         do {
             let urlRequest = try RequestFactory(request: request).urlRequestRepresentation()
+            print("CJHLOG: url = \(urlRequest.url?.absoluteString)")
             return session.dataTaskPublisher(for: urlRequest)
                 .tryMap { data, response in
                     let output = try JSONDecoder().decode(T.Output.self, from: data)
@@ -38,11 +39,10 @@ public final class NetworkImp: Network {
 private final class RequestFactory<T: Request> {
     
     let request: T
-    private var urlComponents: URLComponents?
+    let boundary = "__________________________proc1"
     
     init(request: T) {
         self.request = request
-//        self.urlComponents = URLComponents(url: request.endpoint, resolvingAgainstBaseURL: true)
     }
     
     func urlRequestRepresentation() throws -> URLRequest {
@@ -51,37 +51,21 @@ private final class RequestFactory<T: Request> {
             return try makeGetRequest()
         case .post:
             return try makePostRequest()
-        case .put:
-            return try makePutRequest()
+        case .multipart:
+            return try makeMultipartRequest()
         }
     }
     
     private func makeGetRequest() throws -> URLRequest {
         var param = [""]
         if request.query.isEmpty == false {
-            urlComponents?.queryItems = request.query.map { URLQueryItem(name: $0.key, value: "\($0.value)")}
             request.query.forEach {
                 param.append("\($0.key)=\($0.value)")
             }
         }
         let bodyStr = param.joined(separator: "&")
-        return try makeURLRequest(httpBody: bodyStr)
-    }
-    
-    private func makePostRequest() throws -> URLRequest {
-        let body = try JSONSerialization.data(withJSONObject: request.query, options: [])
-        return try makeURLRequest()
-    }
-    
-    private func makePutRequest() throws -> URLRequest {
-        if request.query.isEmpty == false {
-            urlComponents?.queryItems = request.query.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-        }
-        return try makeURLRequest()
-    }
-    
-    private func makeURLRequest(httpBody: String = "") throws -> URLRequest {
-        guard let url = URL(string: "\(request.endpoint)?\(httpBody)") else {
+        
+        guard let url = URL(string: "\(request.endpoint)?\(bodyStr)") else {
             throw NetworkError.invalidURL(url: request.endpoint)
         }
         
@@ -95,4 +79,80 @@ private final class RequestFactory<T: Request> {
         return urlRequest
     }
     
+    private func makePostRequest() throws -> URLRequest {
+        let body = try JSONSerialization.data(withJSONObject: request.query, options: [])
+        
+        guard let url = URL(string: request.endpoint) else {
+            throw NetworkError.invalidURL(url: request.endpoint)
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        request.header.forEach {
+            urlRequest.setValue($0.value, forHTTPHeaderField: $0.key)
+        }
+        urlRequest.httpMethod = request.method.rawValue
+        urlRequest.url = url
+        urlRequest.httpBody = body
+        
+        return urlRequest
+    }
+    
+    private func makeMultipartRequest() throws -> URLRequest {
+        var body = Data()
+        var imageParts = [Data]()
+        
+        request.query.forEach {
+            if $0.value is Data {
+                imageParts.append($0.value as! Data)
+            } else {
+                body.append("__\(boundary)\r\n".data(using: .utf8)!)
+                body.append("Content-Disposition:form-data; name=\"\($0.key)\"\r\n\r\n".data(using: .utf8)!)
+                body.append("Content-type: text/plain;\r\n\r\n".data(using: .utf8)!)
+                body.append("\($0.value)\r\n".data(using: .utf8)!)
+            }
+        }
+        
+        if imageParts.count == 0 {
+            body.append("__\(boundary)__\r\n".data(using: .utf8)!)
+        } else {
+            var index = 1
+            imageParts.forEach {
+                body.append("__\(boundary)__\r\n".data(using: .utf8)!)
+                body.append("Content-Disposition: form-data; name=\"\(makeFileKey(index: index))\"; filename=\"\(makeFileName(index: index))\"\r\n".data(using: .utf8)!)
+                body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+                body.append($0)
+                body.append("\r\n".data(using: .utf8)!)
+                
+                index += 1
+            }
+            body.append("__\(boundary)__\r\n".data(using: .utf8)!)
+        }
+        
+        guard let url = URL(string: request.endpoint) else {
+            throw NetworkError.invalidURL(url: request.endpoint)
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        request.header.forEach {
+            urlRequest.setValue($0.value, forHTTPHeaderField: $0.key)
+        }
+        urlRequest.httpMethod = request.method.rawValue
+        urlRequest.url = url
+        urlRequest.httpBody = body
+        
+        return urlRequest
+    }
+    
+    private func makeFileKey(index: Int) -> String {
+        return "alter_file_name\(index)"
+    }
+    
+    private func makeFileName(index: Int) -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "Ko_KR")
+        formatter.dateFormat = "MMddHHmmss"
+        
+        return "\(formatter.string(from: date))_\(index).jpeg"
+    }
 }

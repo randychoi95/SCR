@@ -10,5 +10,5 @@ import Foundation
 public enum HTTPMethod: String, Codable {
     case get = "GET"
     case post = "POST"
-    case put = "put"
+    case multipart = "MULTIPART"
 }

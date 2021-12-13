@@ -20,6 +20,12 @@ let package = Package(
         .library(
             name: "ScrRepository",
             targets: ["ScrRepository"]),
+        .library(
+            name: "InventoryEntity",
+            targets: ["InventoryEntity"]),
+        .library(
+            name: "InventoryRepository",
+            targets: ["InventoryRepository"]),
     ],
     dependencies: [
         .package(name: "ModernRIBs", url: "https://github.com/DevYeom/ModernRIBs", .exact("1.0.1")),
@@ -50,6 +56,20 @@ let package = Package(
             name: "ScrRepository",
             dependencies: [
                 "ScrEntity",
+                .product(name: "Network", package: "Platform"),
+                .product(name: "CombineUtil", package: "Platform")
+            ]
+        ),
+        .target(
+            name: "InventoryEntity",
+            dependencies: [
+                
+            ]
+        ),
+        .target(
+            name: "InventoryRepository",
+            dependencies: [
+                "InventoryEntity",
                 .product(name: "Network", package: "Platform"),
                 .product(name: "CombineUtil", package: "Platform")
             ]

@@ -9,6 +9,8 @@ import ModernRIBs
 import ScrRepository
 import Combine
 import ScrEntity
+import ScrUI
+import InventoryRepository
 
 protocol ScrSearchRouting: ViewableRouting {
     
@@ -25,6 +27,7 @@ public protocol ScrSearchListener: AnyObject {
 
 protocol ScrSearchInteractorDependency {
     var scrRepository: ScrRepository { get }
+    var inventoryRepository: InventoryRepository { get }
 }
 
 final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, ScrSearchInteractable, ScrSearchPresentableListener {
@@ -51,10 +54,15 @@ final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, Sc
         
         dependency.scrRepository.scrList
             .sink { models in
-                print("CJHLOG: models = \(models)")
-                print("CJHLGO: count is \(models.count)")
+                print("CJHLOG: scrRepository models = \(models)")
+                print("CJHLOG: scrRepository count is \(models.count)")
             }.store(in: &cancellables)
-    }
+        
+        dependency.inventoryRepository.inventoryList
+            .sink { models in
+                print("CJHLOG: inventoryRepository models = \(models)")
+                print("CJHLOG: inventoryRepository count is \(models.count)")
+            }.store(in: &cancellables)    }
 
     override func willResignActive() {
         super.willResignActive()

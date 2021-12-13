@@ -8,13 +8,16 @@
 import ModernRIBs
 import ScrUI
 import ScrRepository
+import InventoryRepository
 
 public protocol ScrSearchDependency: Dependency {
     var scrRepository: ScrRepository { get }
+    var inventoryRepository: InventoryRepository { get }
 }
 
 final class ScrSearchComponent: Component<ScrSearchDependency>, ScrSearchInteractorDependency {
     var scrRepository: ScrRepository { dependency.scrRepository }
+    var inventoryRepository: InventoryRepository { dependency.inventoryRepository }
 }
 
 // MARK: - Builder

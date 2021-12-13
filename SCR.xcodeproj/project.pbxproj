@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		98671E212766DE97009700F3 /* InventoryEntity in Frameworks */ = {isa = PBXBuildFile; productRef = 98671E202766DE97009700F3 /* InventoryEntity */; };
+		98671E232766DE97009700F3 /* InventoryRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 98671E222766DE97009700F3 /* InventoryRepository */; };
 		9875BD332757347D0019E181 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9875BD322757347D0019E181 /* AppDelegate.swift */; };
 		9875BD3C2757347E0019E181 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9875BD3B2757347E0019E181 /* Assets.xcassets */; };
 		9875BD3F2757347E0019E181 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9875BD3D2757347E0019E181 /* LaunchScreen.storyboard */; };
@@ -54,9 +56,11 @@
 				98B83A7E275D92C900B07DAD /* CombineExt in Frameworks */,
 				9875BD482757355C0019E181 /* ModernRIBs in Frameworks */,
 				98B83A712757433700B07DAD /* ScrSearch in Frameworks */,
+				98671E212766DE97009700F3 /* InventoryEntity in Frameworks */,
 				98B83A7727589CEF00B07DAD /* Network in Frameworks */,
 				98B83A7927589DC000B07DAD /* NetworkImp in Frameworks */,
 				98B83A7B2759A41300B07DAD /* ScrRepository in Frameworks */,
+				98671E232766DE97009700F3 /* InventoryRepository in Frameworks */,
 				98B83A752758628E00B07DAD /* RIBsUtil in Frameworks */,
 				98B83A73275846D400B07DAD /* ScrUI in Frameworks */,
 			);
@@ -151,6 +155,8 @@
 				98B83A7A2759A41300B07DAD /* ScrRepository */,
 				98B83A7D275D92C900B07DAD /* CombineExt */,
 				98B83A7F275D93D400B07DAD /* CombineUtil */,
+				98671E202766DE97009700F3 /* InventoryEntity */,
+				98671E222766DE97009700F3 /* InventoryRepository */,
 			);
 			productName = SCR;
 			productReference = 9875BD2F2757347D0019E181 /* SCR.app */;
@@ -445,6 +451,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		98671E202766DE97009700F3 /* InventoryEntity */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = InventoryEntity;
+		};
+		98671E222766DE97009700F3 /* InventoryRepository */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = InventoryRepository;
+		};
 		9875BD472757355C0019E181 /* ModernRIBs */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9875BD462757355C0019E181 /* XCRemoteSwiftPackageReference "ModernRIBs" */;

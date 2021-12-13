@@ -2,38 +2,38 @@
 //  File.swift
 //  
 //
-//  Created by 최제환 on 2021/12/03.
+//  Created by 최제환 on 2021/12/13.
 //
 
 import Foundation
 import Network
 import Combine
 import CombineUtil
-import ScrEntity
 import ScrUI
+import InventoryEntity
 
-public protocol ScrRepository {
-    var scrList: ReadOnlyCurrentValuePublisher<[OwnScrModel]> { get }
+public protocol InventoryRepository {
+    var inventoryList: ReadOnlyCurrentValuePublisher<[InventoryModel]> { get }
     var totalCount: ReadOnlyCurrentValuePublisher<Int> { get }
     func fetch()
 }
 
-public final class ScrRepositoryImp: ScrRepository {
+public final class InventoryRepositoryImp: InventoryRepository {
     private let netwrok: Network
     private let baseURL: String
     private var query: QueryItems
     private var header: HTTPHeader
     private var cancellables: Set<AnyCancellable>
     
-    public var scrList: ReadOnlyCurrentValuePublisher<[OwnScrModel]> {
-        scrListSubject
+    public var inventoryList: ReadOnlyCurrentValuePublisher<[InventoryModel]> {
+        inventoryListSubject
     }
     
     public var totalCount: ReadOnlyCurrentValuePublisher<Int> {
         return totalCountSubject
     }
     
-    private let scrListSubject = CurrentValuePublisher<[OwnScrModel]>([])
+    private let inventoryListSubject = CurrentValuePublisher<[InventoryModel]>([])
     private let totalCountSubject = CurrentValuePublisher<Int>(0)
     
     public init(network: Network, baseURL: String, query: QueryItems, header: HTTPHeader) {
@@ -45,7 +45,7 @@ public final class ScrRepositoryImp: ScrRepository {
     }
     
     public func fetch() {
-        let request = ScrRequest(baseURL: self.baseURL, query: query, header: header)
+        let request = InventoryRequest(baseURL: self.baseURL, query: query, header: header)
         netwrok.send(request).map(\.output)
             .sink(
                 receiveCompletion: { _ in
@@ -53,7 +53,7 @@ public final class ScrRepositoryImp: ScrRepository {
                 },
                 receiveValue: { [weak self] res in
                     self?.totalCountSubject.send(res.totalCount)
-                    self?.scrListSubject.send(res.data)
+                    self?.inventoryListSubject.send(res.data)
                 })
             .store(in: &cancellables)
     }
