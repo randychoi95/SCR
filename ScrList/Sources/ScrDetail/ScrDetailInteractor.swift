@@ -7,6 +7,8 @@
 
 import ModernRIBs
 import InventoryEntity
+import CoreLocation
+import MapKit
 
 protocol ScrDetailRouting: ViewableRouting {
     
@@ -56,5 +58,4 @@ final class ScrDetailInteractor: PresentableInteractor<ScrDetailPresentable>, Sc
     func detachScrDetail() {
         listener?.detachScrDetail()
     }
-    
 }

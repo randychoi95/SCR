@@ -15,7 +15,8 @@ import InventoryEntity
 public protocol InventoryRepository {
     var inventoryList: ReadOnlyCurrentValuePublisher<[InventoryModel]> { get }
     var totalCount: ReadOnlyCurrentValuePublisher<Int> { get }
-    func fetch()
+    var page: ReadOnlyCurrentValuePublisher<Int> { get }
+    func fetch() -> AnyPublisher<[InventoryModel], Error>
 }
 
 public final class InventoryRepositoryImp: InventoryRepository {
@@ -33,8 +34,13 @@ public final class InventoryRepositoryImp: InventoryRepository {
         return totalCountSubject
     }
     
+    public var page: ReadOnlyCurrentValuePublisher<Int> {
+        return pageSubject
+    }
+    
     private let inventoryListSubject = CurrentValuePublisher<[InventoryModel]>([])
     private let totalCountSubject = CurrentValuePublisher<Int>(0)
+    private let pageSubject = CurrentValuePublisher<Int>(0)
     
     public init(network: Network, baseURL: String, query: QueryItems, header: HTTPHeader) {
         self.netwrok = network
@@ -44,17 +50,19 @@ public final class InventoryRepositoryImp: InventoryRepository {
         self.cancellables = .init()
     }
     
-    public func fetch() {
+    public func fetch() -> AnyPublisher<[InventoryModel], Error> {
         let request = InventoryRequest(baseURL: self.baseURL, query: query, header: header)
-        netwrok.send(request).map(\.output)
-            .sink(
-                receiveCompletion: { _ in
-                    print("CJHLOG: Finish~~~")
-                },
-                receiveValue: { [weak self] res in
-                    self?.totalCountSubject.send(res.totalCount)
-                    self?.inventoryListSubject.send(res.data)
-                })
-            .store(in: &cancellables)
+        return netwrok.send(request).map(\.output.data)
+            .handleEvents(receiveSubscription: nil,
+                          receiveOutput: { [weak self] res in
+                guard let this = self else {
+                    return
+                }
+                this.inventoryListSubject.send(this.inventoryListSubject.value + res)
+            },
+                          receiveCompletion: nil,
+                          receiveCancel: nil,
+                          receiveRequest: nil)
+            .eraseToAnyPublisher()
     }
 }

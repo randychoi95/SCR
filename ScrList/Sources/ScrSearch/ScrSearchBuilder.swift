@@ -14,12 +14,18 @@ import RIBsUtil
 
 public protocol ScrSearchDependency: Dependency {
     var scrRepository: ScrRepository { get }
-    var inventoryRepository: InventoryRepository { get }
+    var inventoryRepository: InventoryRepository? { get }
 }
 
 final class ScrSearchComponent: Component<ScrSearchDependency>, ScrSearchInteractorDependency,ScrDetailDependency {
+    
     var scrRepository: ScrRepository { dependency.scrRepository }
-    var inventoryRepository: InventoryRepository { dependency.inventoryRepository }
+    var inventoryRepository: InventoryRepository?
+    
+    override init(dependency: ScrSearchDependency) {
+        self.inventoryRepository = dependency.inventoryRepository
+        super.init(dependency: dependency)
+    }
 }
 
 // MARK: - Builder

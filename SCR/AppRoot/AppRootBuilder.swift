@@ -22,31 +22,18 @@ protocol AppRootDependency: Dependency {
 final class AppRootComponent: Component<AppRootDependency>, ScrSearchDependency {
     
     var scrRepository: ScrRepository
-    var inventoryRepository: InventoryRepository
+    var inventoryRepository: InventoryRepository?
     
     private let rootViewController: AppRootViewControllable
     
     init(
         dependency: AppRootDependency,
-        rootViewController: AppRootViewControllable
+        rootViewController: AppRootViewControllable,
+        scrRepository: ScrRepository,
+        inventoryRepository: InventoryRepository
     ) {
-        
-        let network = NetworkImp(session: URLSession.shared)
-        self.scrRepository = ScrRepositoryImp.init(
-            network: network,
-            baseURL: "https://api.odcloud.kr/api/15094782/v1/uddi:6b2017af-659d-437e-a549-c59788817675",
-            query: ["page": "1", "perPage": "10", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
-            header: ["Content-Type":"application/json", "charset":"UTF-8"] // multipart => "Content-Type":"multipart/form-data"
-        )
-        self.scrRepository.fetch()
-        
-        self.inventoryRepository = InventoryRepositoryImp(
-            network: network,
-            baseURL: "https://api.odcloud.kr/api/uws/v1/inventory",
-            query: ["page": "1", "perPage": "10", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
-            header: ["Content-Type":"application/json", "charset":"UTF-8"])
-        self.inventoryRepository.fetch()
-                
+        self.scrRepository = scrRepository
+        self.inventoryRepository = inventoryRepository
         self.rootViewController = rootViewController
         
         super.init(dependency: dependency)
@@ -69,14 +56,36 @@ final class AppRootBuilder: Builder<AppRootDependency>, AppRootBuildable {
 
     func build() -> LaunchRouting {
         let viewController = callViewControllerFromStoryboard(sb: "AppRootViewController", ids: "AppRootViewController") as! AppRootViewController
+        
+        let network = NetworkImp(session: URLSession.shared)
+        
+        let scrRepository = ScrRepositoryImp.init(
+            network: network,
+            baseURL: "https://api.odcloud.kr/api/15094782/v1/uddi:6b2017af-659d-437e-a549-c59788817675",
+            query: ["page": "1", "perPage": "10", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
+            header: ["Content-Type":"application/json", "charset":"UTF-8"] // multipart => "Content-Type":"multipart/form-data"
+        )
+        
+        let inventoryRepository = InventoryRepositoryImp(
+            network: network,
+            baseURL: "https://api.odcloud.kr/api/uws/v1/inventory",
+            query: ["page": "1", "perPage": "20", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
+            header: ["Content-Type":"application/json", "charset":"UTF-8"]
+        )
+        
         let component = AppRootComponent(
             dependency: dependency,
-            rootViewController: viewController
+            rootViewController: viewController,
+            scrRepository: scrRepository,
+            inventoryRepository: inventoryRepository
         )
-        let interactor = AppRootInteractor(presenter: viewController)
+        
+        let interactor = AppRootInteractor(
+            presenter: viewController,
+            inventoryRepository: inventoryRepository
+        )
         
         let scrSearchBuilder = ScrSearchBuilder(dependency: component)
-        let router = scrSearchBuilder.build(withListener: interactor)
         
         return AppRootRouter(
             interactor: interactor,

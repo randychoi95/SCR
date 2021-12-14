@@ -22,7 +22,7 @@ public final class NetworkImp: Network {
     public func send<T>(_ request: T) -> AnyPublisher<Response<T.Output>, Error> where T: Request {
         do {
             let urlRequest = try RequestFactory(request: request).urlRequestRepresentation()
-            print("CJHLOG: url = \(urlRequest.url?.absoluteString)")
+            print("CJHLOG: urlString = \(urlRequest.url?.absoluteString ?? "")")
             return session.dataTaskPublisher(for: urlRequest)
                 .tryMap { data, response in
                     let output = try JSONDecoder().decode(T.Output.self, from: data)
@@ -64,7 +64,6 @@ private final class RequestFactory<T: Request> {
             }
         }
         let bodyStr = param.joined(separator: "&")
-        
         guard let url = URL(string: "\(request.endpoint)?\(bodyStr)") else {
             throw NetworkError.invalidURL(url: request.endpoint)
         }
