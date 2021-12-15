@@ -7,19 +7,15 @@
 
 import ModernRIBs
 import ScrUI
-import ScrRepository
 import InventoryRepository
 import ScrDetail
 import RIBsUtil
 
 public protocol ScrSearchDependency: Dependency {
-    var scrRepository: ScrRepository { get }
     var inventoryRepository: InventoryRepository? { get }
 }
 
 final class ScrSearchComponent: Component<ScrSearchDependency>, ScrSearchInteractorDependency,ScrDetailDependency {
-    
-    var scrRepository: ScrRepository { dependency.scrRepository }
     var inventoryRepository: InventoryRepository?
     
     override init(dependency: ScrSearchDependency) {

@@ -11,7 +11,6 @@ import ScrUI
 import ScrSearch
 import ScrDetail
 import NetworkImp
-import ScrRepository
 import InventoryRepository
 import RIBsUtil
 
@@ -21,7 +20,6 @@ protocol AppRootDependency: Dependency {
 
 final class AppRootComponent: Component<AppRootDependency>, ScrSearchDependency {
     
-    var scrRepository: ScrRepository
     var inventoryRepository: InventoryRepository?
     
     private let rootViewController: AppRootViewControllable
@@ -29,10 +27,8 @@ final class AppRootComponent: Component<AppRootDependency>, ScrSearchDependency 
     init(
         dependency: AppRootDependency,
         rootViewController: AppRootViewControllable,
-        scrRepository: ScrRepository,
         inventoryRepository: InventoryRepository
     ) {
-        self.scrRepository = scrRepository
         self.inventoryRepository = inventoryRepository
         self.rootViewController = rootViewController
         
@@ -59,24 +55,17 @@ final class AppRootBuilder: Builder<AppRootDependency>, AppRootBuildable {
         
         let network = NetworkImp(session: URLSession.shared)
         
-        let scrRepository = ScrRepositoryImp.init(
-            network: network,
-            baseURL: "https://api.odcloud.kr/api/15094782/v1/uddi:6b2017af-659d-437e-a549-c59788817675",
-            query: ["page": "1", "perPage": "10", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
-            header: ["Content-Type":"application/json", "charset":"UTF-8"] // multipart => "Content-Type":"multipart/form-data"
-        )
-        
         let inventoryRepository = InventoryRepositoryImp(
             network: network,
             baseURL: "https://api.odcloud.kr/api/uws/v1/inventory",
             query: ["page": "1", "perPage": "20", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
             header: ["Content-Type":"application/json", "charset":"UTF-8"]
         )
+        inventoryRepository.fetchScrList()
         
         let component = AppRootComponent(
             dependency: dependency,
             rootViewController: viewController,
-            scrRepository: scrRepository,
             inventoryRepository: inventoryRepository
         )
         

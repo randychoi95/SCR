@@ -28,27 +28,57 @@ final class ScrDetailViewController: UIViewController, ScrDetailPresentable, Scr
         return stackView
     }()
     
-    private let nameLabel: UILabel = {
+    private let inventoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+        label.textColor = .darkGray
+        label.text = "-"
         return label
     }()
     
     private let addrLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+        label.textColor = .darkGray
+        label.text = "-"
         return label
     }()
     
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+        label.textColor = .darkGray
+        label.text = "-"
         return label
     }()
     
     private let telLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+        label.textColor = .darkGray
+        label.text = "-"
+        return label
+    }()
+    
+    private let regDtLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+        label.textColor = .darkGray
+        label.text = "-"
+        return label
+    }()
+    
+    private let openTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+        label.textColor = .darkGray
+        label.text = "-"
         return label
     }()
     
@@ -72,14 +102,14 @@ final class ScrDetailViewController: UIViewController, ScrDetailPresentable, Scr
         view.addSubview(stackView)
         view.backgroundColor = .white
         
-        stackView.addArrangedSubview(nameLabel)
+        stackView.addArrangedSubview(inventoryLabel)
         stackView.addArrangedSubview(addrLabel)
         stackView.addArrangedSubview(priceLabel)
         stackView.addArrangedSubview(telLabel)
+        stackView.addArrangedSubview(regDtLabel)
+        stackView.addArrangedSubview(openTimeLabel)
         
         view.addSubview(mapView)
-        
-        title = "요소수 상세"
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(
@@ -109,10 +139,14 @@ final class ScrDetailViewController: UIViewController, ScrDetailPresentable, Scr
     }
     
     func update(model: InventoryModel) {
-        nameLabel.text = "주유소 : \(model.name)"
+        inventoryLabel.text = "재고량 : \(Formatter.priceFormatter.string(from: NSNumber(value: Int(model.inventory) ?? 0)) ?? "-")L"
         addrLabel.text = "주 소 : \(model.addr)"
-        priceLabel.text = "가 격 : \(model.price)원"
+        priceLabel.text = "가 격 : \(Formatter.priceFormatter.string(from: NSNumber(value: Int(model.price) ?? 0)) ?? "-")원"
         telLabel.text = "전화번호 : \(model.tel)"
+        regDtLabel.text = "마지막 갱신날짜: \(model.regDt)"
+        openTimeLabel.text = "영업시간 : \(model.openTime ?? "-")"
+        
+        title = model.name
         
         setMapView(model: model)
     }

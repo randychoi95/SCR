@@ -6,7 +6,6 @@
 //
 
 import ModernRIBs
-import ScrRepository
 import Combine
 import ScrEntity
 import ScrUI
@@ -28,11 +27,10 @@ protocol ScrSearchPresentable: Presentable {
 }
 
 public protocol ScrSearchListener: AnyObject {
-    func searchScrList(page: Int)
+    
 }
 
 protocol ScrSearchInteractorDependency {
-    var scrRepository: ScrRepository { get }
     var inventoryRepository: InventoryRepository? { get set }
 }
 
@@ -65,7 +63,7 @@ final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, Sc
     override func didBecomeActive() {
         super.didBecomeActive()
         
-        dependency.inventoryRepository?.fetch()
+        dependency.inventoryRepository?.inventoryList
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }) { [weak self] model in
                 print("model = \(model)")
@@ -76,17 +74,18 @@ final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, Sc
                 self.presenter.update(model: self.models)
             }.store(in: &cancellables)
         
-//        dependency.inventoryRepository.totalCount
-//            .receive(on: DispatchQueue.main)
-//            .sink { totalCount in
-//                self.totalCount = totalCount
-//            }.store(in: &cancellables)
-//
-//        dependency.inventoryRepository.page
-//            .receive(on: DispatchQueue.main)
-//            .sink { page in
-//                self.page = page
-//            }.store(in: &cancellables)
+        dependency.inventoryRepository?.totalCount
+            .receive(on: DispatchQueue.main)
+            .sink { totalCount in
+                print("CJHLOG: total = \(totalCount)")
+                self.totalCount = totalCount
+            }.store(in: &cancellables)
+        
+        dependency.inventoryRepository?.page
+            .receive(on: DispatchQueue.main)
+            .sink { page in
+                self.page = page
+            }.store(in: &cancellables)
     }
     
     override func willResignActive() {
@@ -102,21 +101,25 @@ final class ScrSearchInteractor: PresentableInteractor<ScrSearchPresentable>, Sc
     }
     
     func paging() {
-//        if models.count < totalCount {
-        let network = NetworkImp(session: URLSession.shared)
-        dependency.inventoryRepository = InventoryRepositoryImp(
-            network: network,
-            baseURL: "https://api.odcloud.kr/api/uws/v1/inventory",
-            query: ["page": "2", "perPage": "20", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
-            header: ["Content-Type":"application/json", "charset":"UTF-8"]
-        )
-            dependency.inventoryRepository?.fetch()
+        self.page += 1
+        print("CJHLOG: page = \(self.page)")
+        if models.count < totalCount {
+            let network = NetworkImp(session: URLSession.shared)
+            dependency.inventoryRepository = InventoryRepositoryImp(
+                network: network,
+                baseURL: "https://api.odcloud.kr/api/uws/v1/inventory",
+                query: ["page": "\(self.page)", "perPage": "20", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
+                header: ["Content-Type":"application/json", "charset":"UTF-8"]
+            )
+            dependency.inventoryRepository?.fetchScrList()
+            
+            dependency.inventoryRepository?.inventoryList
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { _ in }) { model in
                     print("new Model = \(model)")
                     self.models.append(contentsOf: model)
                     self.presenter.update(model: self.models)
                 }.store(in: &cancellables)
-//        }
+        }
     }
 }

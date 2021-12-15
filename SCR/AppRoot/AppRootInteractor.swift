@@ -54,20 +54,4 @@ final class AppRootInteractor: PresentableInteractor<AppRootPresentable>, AppRoo
     override func willResignActive() {
         super.willResignActive()
     }
-    
-    func searchScrList(page: Int) {
-        print("CJHLOG: page = \(page)")
-        let network = NetworkImp(session: URLSession.shared)
-        inventoryRepository = InventoryRepositoryImp(
-            network: network,
-            baseURL: "https://api.odcloud.kr/api/uws/v1/inventory",
-            query: ["page": "2", "perPage": "20", "serviceKey":"9PAc6aMn2DC3xdA7rYZn71Hxr3mT9V5E4qnnakQkwj44zVNrPfV%2FVLVnDsnf30wrZZ%2BD%2FS%2BWRTNinP7J8lMjeQ%3D%3D"],
-            header: ["Content-Type":"application/json", "charset":"UTF-8"]
-        )
-        
-//        inventoryRepository.inventoryList
-//            .sink { model in
-//                print("CJHLOG: new Model = \(model)")
-//            }.store(in: &cancellables)
-    }
 }

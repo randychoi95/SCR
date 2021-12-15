@@ -16,7 +16,7 @@ public protocol InventoryRepository {
     var inventoryList: ReadOnlyCurrentValuePublisher<[InventoryModel]> { get }
     var totalCount: ReadOnlyCurrentValuePublisher<Int> { get }
     var page: ReadOnlyCurrentValuePublisher<Int> { get }
-    func fetch() -> AnyPublisher<[InventoryModel], Error>
+    func fetchScrList()
 }
 
 public final class InventoryRepositoryImp: InventoryRepository {
@@ -50,19 +50,15 @@ public final class InventoryRepositoryImp: InventoryRepository {
         self.cancellables = .init()
     }
     
-    public func fetch() -> AnyPublisher<[InventoryModel], Error> {
+    public func fetchScrList()  {
         let request = InventoryRequest(baseURL: self.baseURL, query: query, header: header)
-        return netwrok.send(request).map(\.output.data)
-            .handleEvents(receiveSubscription: nil,
-                          receiveOutput: { [weak self] res in
-                guard let this = self else {
-                    return
-                }
-                this.inventoryListSubject.send(this.inventoryListSubject.value + res)
-            },
-                          receiveCompletion: nil,
-                          receiveCancel: nil,
-                          receiveRequest: nil)
-            .eraseToAnyPublisher()
+        netwrok.send(request).map(\.output)
+            .sink(receiveCompletion: { _ in }) { res in
+                self.inventoryListSubject.send(self.inventoryListSubject.value + res.data)
+                self.totalCountSubject.send(res.totalCount)
+                self.pageSubject.send(res.page)
+            }.store(in: &cancellables)
     }
+    
+    
 }

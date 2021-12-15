@@ -99,7 +99,7 @@ extension ScrSearchViewController: UITableViewDataSource {
         if indexPath.section == 0 {
             let cell: ScrSearchTableViewCell = tableView.dequeueReusableCell(for: indexPath)
             
-            cell.setTitle(self.models[indexPath.row].name)
+            cell.setTableViewCell(self.models[indexPath.row].name, self.models[indexPath.row].addr)
             
             return cell
         } else {
@@ -124,10 +124,8 @@ extension ScrSearchViewController {
         
         if offsetY > (contentHeight - height) {
             if isPaging == false {
-                print("1")
                 isPaging = true
                 self.tableView.reloadSections(IndexSet(integer: 1), with: .none)
-                print("2")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.listener?.paging()
                 }
