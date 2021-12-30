@@ -4,3 +4,9 @@
 - 공개되는 요소수 가격은 기본적으로 벌크 요소수 가격이며, 페트 요소수 가격은 표시
 
 참고: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15095040
+
+### Skills ###
+- Language: Swift
+- Tool: xcode
+- Architecture: RIBs
+- Library/Framework: Combine, CombineExt, ModernRIBs, UIKit
